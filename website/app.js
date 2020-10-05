@@ -4,13 +4,24 @@
 let d = new Date();
 let newDate = d.getMonth() + '.' + d.getDate() + '.' + d.getFullYear();
 
-async function getData(url, data) {
-    const response = await fetch(url)
+async function getData(url) {
+    const response = await fetch(url);
+    console.log('resp object', response);
+    return response;
+
+    // try {
+    //     const newData = await response.json();
+    //     console.log('new data: ', newData);
+    //     return newData
+    // } catch (error) {
+    //     console.log("error", error);
+    //     // appropriately handle the error
+    // }
 }
 
 /* Function to POST data */
 async function postData(url, data) {
-    const response = await fetch(url, {
+    return fetch(url, {
         method: 'POST',
         credentials: 'include', // default - allows requests from same URL only
         headers: {
@@ -22,7 +33,6 @@ async function postData(url, data) {
 
     try {
         const newData = await response.json();
-        console.log('new data: ', newData);
         return newData
     } catch (error) {
         console.log("error", error);
@@ -42,11 +52,11 @@ generator.addEventListener("click", async function fetchWeatherData() {
         zipcode,
         feelings,
     }
-    console.log(zipcode, feelings);
 
-    const weatherData = await postData('/', userData);
+    const weatherData = await postData('/', userData).then(async() => {
+        await getData('/');
+    })
 
-    console.log('front end data: ', weatherData);
 
 });
 
