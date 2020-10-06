@@ -2,10 +2,9 @@
 let projectData = {};
 
 const result = require('dotenv').config()
-// const result = dotenv.config()
 
 const fetch = require('node-fetch');
-const APIkey = process.env.APIkey;
+const APIkey = process.env.APIkey; // Store API key in environment variables for security
 
 // Install dependencies
 const bodyParser = require('body-parser');
@@ -31,8 +30,8 @@ app.use(express.static('website'));
 // Port number for our server to use
 const port = 3000;
 
+// Get request to the Weather Map API with the user's zip code
 async function weatherData(data) {
-    console.log('zip', data.data.zipcode);
     const url = `https://api.openweathermap.org/data/2.5/weather?zip=${data.data.zipcode}&appid=${APIkey}`;
 
     return await fetch(url).then(
@@ -46,6 +45,7 @@ async function weatherData(data) {
 
                 // Examine the text in the response
                 response.json().then(function (data) {
+                    console.log('success!');
                     return resolve(data)
                 });
             })
@@ -56,23 +56,24 @@ async function weatherData(data) {
 }
 
 // Setup Server
-app.get('/', (req, res) => {
-    if (projectData.length >= 1) {
-        console.log('project data');
-        res.send(projectData);
-    }
+app.get('/data', (req, res) => {
+    res.send(projectData);
 })
 
+// After recieving user's post data, update the projectData object
 app.post('/', async (req, res) => {
     try {
         const data = await weatherData(req.body);
-        projectData["APIdata"] = data;
+        projectData["feelings"] = req.body["data"]["feelings"];
+        projectData["weather"] = data["weather"];
+        projectData["temp"] = data["main"]["temp"];
         res.send(data);
     } catch (err) {
         res.send(`Error making POST request: ${err}`);
     }
 })
 
+// Run app on port 3000
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })
