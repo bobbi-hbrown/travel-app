@@ -32,7 +32,7 @@ const port = 3000;
 
 // Get request to the Weather Map API with the user's zip code
 async function weatherData(data) {
-    const url = `https://api.openweathermap.org/data/2.5/weather?zip=${data.data.zipcode}&appid=${APIkey}`;
+    const url = `https://api.openweathermap.org/data/2.5/weather?zip=${data.data.zipcode}&appid=${APIkey}&units=imperial`;
 
     return await fetch(url).then(
         function (response) {
