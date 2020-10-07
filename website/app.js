@@ -10,13 +10,13 @@ function updateUI(data) {
     const date = document.getElementById("date");
     const temp = document.getElementById("temp");
     const content = document.getElementById("content");
-    const mood = document.getElementById("mood")
+    const mood = document.getElementById("mood");
 
-    // Set the inner text to equal our parsed response from the user & the API
-    date.innerText = newDate;
-    temp.innerText = data["temp"];
-    content.innerText = data["weather"][0]["description"];
-    mood.innerText = data["feelings"];
+    // WARNING - using .innerHTML instead of .innerText makes this app vulnerable to xss vulnerabilities, DO NOT USE IN PROD
+    date.innerHTML = newDate;
+    temp.innerHTML = data["temp"];
+    content.innerHTML = data["weather"][0]["description"];
+    mood.innerHTML = data["feelings"];
 }
 
 // Make a get request
