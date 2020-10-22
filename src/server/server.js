@@ -25,7 +25,8 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Initialize the main project folder
-app.use(express.static('website'));
+app.use(express.static('dist'));
+
 
 // Port number for our server to use
 const port = 3000;
@@ -60,7 +61,7 @@ app.get('/data', (req, res) => {
     res.send(projectData);
 })
 
-// After recieving user's post data, update the projectData object
+// After receiving user's post data, update the projectData object
 app.post('/', async (req, res) => {
     try {
         const data = await weatherData(req.body);
