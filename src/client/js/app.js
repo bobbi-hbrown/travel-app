@@ -1,17 +1,10 @@
 // Create a new date instance dynamically with JS
-import {updateUI} from "./helpers";
-import {postData} from "./helpers";
+import {updateUI} from "./updateUI";
+import {
+    postData,
+    getData
+} from "./helpers";
 import {getCountdown} from "../index";
-
-// Make a get request
-async function getData(url) {
-    try {
-        const response = await fetch(url);
-        return response;
-    } catch (error) {
-        console.log("Error fetching API data!", error);
-    }
-}
 
 // Add event listener to 'generate' button
 const generator = document.getElementById('generate');
