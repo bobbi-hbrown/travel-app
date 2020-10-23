@@ -1,5 +1,7 @@
 The udacity travel app! Simply enter a city name and future date for help planning your dream trip.
 
+For the additional feature I chose to use the local storage option.
+
 To run this project in development, run:
 
 `node src/server/server.js
