@@ -90,6 +90,6 @@ app.post('/', async (req, res) => {
 })
 
 // Run app on port 8000
-app.listen(port, () => {
+module.exports = app.listen(port, () => {
     console.log(`Travel app listening at http://localhost:${port}`)
 })
