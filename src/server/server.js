@@ -1,10 +1,15 @@
 // Setup empty JS object to act as endpoint for all routes
 let projectData = {};
 
-const result = require('dotenv').config()
+require('dotenv').config()
+const path = require('path');
 
 const fetch = require('node-fetch');
-const APIkey = process.env.APIkey; // Store API key in environment variables for security
+
+// Store API key in environment variables for security
+const userName = process.env.userName;
+const weatherbitKey = process.env.weatherbitKey;
+const pixabayKey = process.env.pixabayKey;
 
 // Install dependencies
 const bodyParser = require('body-parser');
@@ -15,38 +20,31 @@ const express = require('express');
 
 // Start up an instance of app
 const app = express();
+app.use(express.static('dist'));
+app.use(cors())
 
 /* Middleware*/
 //Here we are configuring express to use body-parser as middle-ware.
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-// Cors for cross origin allowance
-app.use(cors());
-
 // Initialize the main project folder
-app.use(express.static('dist'));
-
 
 // Port number for our server to use
-const port = 3000;
+const port = 8000;
 
 // Get request to the Weather Map API with the user's zip code
-async function weatherData(data) {
-    const url = `https://api.openweathermap.org/data/2.5/weather?zip=${data.data.zipcode}&appid=${APIkey}&units=imperial`;
-
+async function fetchData(url) {
     return await fetch(url).then(
         function (response) {
             return new Promise(resolve => {
+                console.log(response.status)
                 if (response.status !== 200) {
-                    console.log('Looks like there was a problem. Status Code: ' +
+                    return ('Looks like there was a problem. Status Code: ' +
                         response.status);
-                    return;
                 }
-
                 // Examine the text in the response
                 response.json().then(function (data) {
-                    console.log('success!');
                     return resolve(data)
                 });
             })
@@ -56,7 +54,12 @@ async function weatherData(data) {
     });
 }
 
-// Setup Server
+// Send index page when user requests root
+app.get('/', function (req, res) {
+    res.sendFile(path.resolve('dist/index.html'));
+})
+
+// Send api data to be parsed in front end
 app.get('/data', (req, res) => {
     res.send(projectData);
 })
@@ -64,17 +67,29 @@ app.get('/data', (req, res) => {
 // After receiving user's post data, update the projectData object
 app.post('/', async (req, res) => {
     try {
-        const data = await weatherData(req.body);
-        projectData["feelings"] = req.body["data"]["feelings"];
-        projectData["weather"] = data["weather"];
-        projectData["temp"] = data["main"]["temp"];
-        res.send(data);
+        const city = req.body.data.city;
+        const geoUrl = `http://api.geonames.org/postalCodeSearchJSON?placename=${city}&username=${userName}`;
+        const geoData = await fetchData(geoUrl);
+        const firstResult = geoData["postalCodes"][0]
+        projectData["city"] = city;
+        projectData["longitude"] = firstResult["lng"];
+        projectData["latitude"] = firstResult["lat"];
+
+        const weatherUrl = `http://api.weatherbit.io/v2.0/current?key=${weatherbitKey}&city=${city}`
+        const weatherData = await fetchData(weatherUrl);
+        projectData["weather"] = weatherData["data"][0]["weather"]["description"];
+
+        const imageUrl = `https://pixabay.com/api/?key=${pixabayKey}&q=${city}&safesearch=true&editors_choice=true&orientation=horizontal`;
+        const imageData = await fetchData(imageUrl);
+        projectData["image"] = imageData["hits"][0]["webformatURL"];
+        res.send(imageData);
+
     } catch (err) {
         res.send(`Error making POST request: ${err}`);
     }
 })
 
-// Run app on port 3000
+// Run app on port 8000
 app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
+    console.log(`Travel app listening at http://localhost:${port}`)
 })
