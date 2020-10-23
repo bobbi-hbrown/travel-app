@@ -29,5 +29,4 @@ async function postData(url, data) {
 export {
     postData,
     getData,
-    updateUI
 }

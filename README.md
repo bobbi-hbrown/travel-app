@@ -12,7 +12,7 @@ To start the development server. Then in another tab run:
 `
 
 To run this project in production mode, simply run
-`npm run build-prod`, which should start up your production server automatically.
+`npm run build-prod`, to create the dist folder, followed by `npm start`.
 
 This project requires a .env file containing Meaning Cloud API keys to successfully authenticate each request. The yaml file must be in the format of
 `APIkey=XXXXXXXXXXXXXXXX`
