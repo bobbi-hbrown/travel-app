@@ -1,8 +1,18 @@
-# Weather-Journal App Project
+The udacity travel app! Simply enter a city name and future date for help planning your dream trip.
 
-## Overview
-This project requires you to create an asynchronous web app that uses Web API and user data to dynamically update the UI. 
+To run this project in development, run:
 
-## Instructions
-To use this app, simply post a valid US zip-code, and how you're feeling today - your entry should then be updated after clicking 'generate'!
+`node src/server/server.js
+`
+To start the development server. Then in another tab run:
+
+`npm run build-dev
+`
+
+To run this project in production mode, simply run
+`npm run build-prod`, which should start up your production server automatically.
+
+This project requires a .env file containing Meaning Cloud API keys to successfully authenticate each request. The yaml file must be in the format of
+`APIkey=XXXXXXXXXXXXXXXX`
+
 
