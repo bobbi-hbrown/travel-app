@@ -1,44 +1,80 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
-    <title>Weather Journal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bobbi's Travel App!</title>
     <link href="https://fonts.googleapis.com/css?family=Oswald:400,600,700|Ranga:400,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 <div id="app">
-    <div class="holder headline">
-        <h1>Weather Journal App</h1>
+
+    <div id="header">
+        <h1>Bobbi's Travel App!</h1>
     </div>
-    <div class="holder zip">
-        <label for="zip">Enter Zipcode here (US only!)</label>
-        <input type="text" id="zip" placeholder="enter zip code here">
-    </div>
-    <div class="holder feel">
-        <label for="feelings">How are you feeling today?</label>
-        <textarea class="myInput" id="feelings" placeholder="Enter your feelings here" rows="9" cols="50"></textarea>
-        <button id="generate" type="submit"> Generate</button>
-    </div>
-    <div class="holder entry">
-        <div class="title">Most Recent Entry</div>
-        <div id="entryHolder">
-            Date:
-            <div id="date">
-            </div>
-            Temperature:
-            <div id="temp">
-            </div>
-            Weather info:
-            <div id="content">
-            </div>
-            Your mood:
-            <div id="mood">
+
+    <section class="top-section">
+        <form>
+            <label for="city">I'm going to:</label>
+            <input type="text" id="city" name="city" placeholder="city"><br><br>
+            <label for="departing">Departing:</label>
+            <input type="date" id="departing" name="departing"><br><br>
+        </form>
+        <button id="generate">Plan my next trip</button>
+        <button id="delete" class="hidden">Delete Trip</button>
+
+    </section>
+
+    <section class="result-section hidden">
+
+        <div id="column-one">
+
+            <img src="https://via.placeholder.com/150" id="image"/>
+
+            <div id="clockdiv" class="hidden">
+                <div>
+                    <span class="days"></span>
+                    <div class="smalltext">Days</div>
+                </div>
+                <div>
+                    <span class="hours"></span>
+                    <div class="smalltext">Hours</div>
+                </div>
+                <div>
+                    <span class="minutes"></span>
+                    <div class="smalltext">Minutes</div>
+                </div>
+                <div>
+                    <span class="seconds"></span>
+                    <div class="smalltext">Seconds</div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-<script src="app.js" type="text/javascript"></script>
 
+        <div id="column-two">
+            <div id="city-name"></div>
+            <div id="longitude"></div>
+            <div id="latitude"></div>
+            <div id="weather"></div>
+        </div>
+
+    </section>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                    // Registration was successful
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, function(err) {
+                    // registration failed :(
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+    </script>
+</div>
 </body>
+
 </html>
