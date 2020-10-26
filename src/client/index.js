@@ -10,13 +10,13 @@ import {
     deleteButton
 } from "./js/app";
 
-import {updateUI} from "./js/helpers";
+import {updateUI} from "./js/updateUI";
 
 // check to see if data has previously been fetched and saved upon refresh
 let items
-
-if (localStorage.getItem('items')) {
-    items = JSON.parse(localStorage.getItem('items'))
+if (localStorage['items'] !== "undefined") {
+    items = localStorage.getItem('items');
+    console.log(items, typeof items);
     updateUI(items)
 } else {
     items = []

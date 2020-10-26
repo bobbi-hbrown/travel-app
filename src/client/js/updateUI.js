@@ -5,7 +5,7 @@ function updateUI(data) {
     localStorage.setItem('items', data);
 
     // Retrieve previous results from local storage
-    data = JSON.parse(localStorage.getItem('items'));
+    data = localStorage.getItem('items');
     // Select relevant elements to be updated
     const longitude = document.getElementById("longitude");
     const latitude = document.getElementById("latitude");
